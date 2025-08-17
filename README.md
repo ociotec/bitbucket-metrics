@@ -39,6 +39,8 @@ Additionally to go metrics, these are the exposed metrics:
 * `bitbucket_repositories`
 * `bitbucket_prs_by_author` labeled by `project`, `repo` & `author`
 * `bitbucket_prs_by_reviewer` labeled by `project`, `repo` & `reviewer`
+* `bitbucket_branches_by_author` labeled by `project`, `repo` & `author`
+* `bitbucket_tags_by_author` labeled by `project`, `repo` & `reviewer`
 * `bitbucket_collect_time` last metrics collection time in milliseconds
 
 ## Docker

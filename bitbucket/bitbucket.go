@@ -212,3 +212,61 @@ func PRs(request *Request, project string, repo string) ([]PR, error) {
 	}
 	return prs, nil
 }
+
+type Reference struct {
+	Name   string
+	Author string
+}
+
+func References(request *Request, project string, repo string) ([]Reference, []Reference, error) {
+	var branches, tags []Reference
+	path := fmt.Sprintf("projects/%s/repos/%s/ref-change-activities", project, repo)
+	err := paginatedValues(request, path, nil, func(valueJSON map[string]any) {
+		author, okAuthor := "", false
+		authorStruct, okAuthorStruct := valueJSON["user"].(map[string]any)
+		if okAuthorStruct {
+			author, okAuthor = authorStruct["name"].(string)
+		}
+		refName, okRefName := "", false
+		refType, okRefType := "", false
+		refChangeStruct, okRefChangeStruct := valueJSON["refChange"].(map[string]any)
+		if okRefChangeStruct {
+			refStruct, okRefStruct := refChangeStruct["ref"].(map[string]any)
+			if okRefStruct {
+				refName, okRefName = refStruct["displayId"].(string)
+				refType, okRefType = refStruct["type"].(string)
+			}
+		}
+		if okAuthor && okRefName && okRefType {
+			log.WithFields(log.Fields{
+				"project":   project,
+				"repo":      repo,
+				"reference": refName,
+				"type":      refType,
+				"author":    author,
+			}).Debug("Reference collected")
+			reference := Reference{
+				Name:   refName,
+				Author: author,
+			}
+			switch refType {
+			case "BRANCH":
+				branches = append(branches, reference)
+			case "TAG":
+				tags = append(tags, reference)
+			default:
+				log.WithFields(log.Fields{
+					"project":   project,
+					"repo":      repo,
+					"reference": refName,
+					"type":      refType,
+					"author":    author,
+				}).Error("Reference of unknown type")
+			}
+		}
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	return branches, tags, nil
+}

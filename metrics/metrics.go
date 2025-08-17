@@ -11,11 +11,13 @@ import (
 )
 
 type Metrics struct {
-	ProjectsGauge      prometheus.Gauge
-	RepositoriesGauge  prometheus.Gauge
-	PRsByAuthorGauge   *prometheus.GaugeVec
-	PRsByReviewerGauge *prometheus.GaugeVec
-	CollectTimeGauge   prometheus.Gauge
+	ProjectsGauge         prometheus.Gauge
+	RepositoriesGauge     prometheus.Gauge
+	PRsByAuthorGauge      *prometheus.GaugeVec
+	PRsByReviewerGauge    *prometheus.GaugeVec
+	BranchesByAuthorGauge *prometheus.GaugeVec
+	TagsByAuthorGauge     *prometheus.GaugeVec
+	CollectTimeGauge      prometheus.Gauge
 }
 
 func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(metrics *Metrics)) {
@@ -46,6 +48,20 @@ func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(
 			},
 			[]string{"project", "repo", "reviewer"},
 		),
+		BranchesByAuthorGauge: prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
+				Name: "bitbucket_branches_by_author",
+				Help: "Number of Bitbucket branches by author being monitored",
+			},
+			[]string{"project", "repo", "author"},
+		),
+		TagsByAuthorGauge: prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
+				Name: "bitbucket_tags_by_author",
+				Help: "Number of Bitbucket tags by author being monitored",
+			},
+			[]string{"project", "repo", "author"},
+		),
 		CollectTimeGauge: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "bitbucket_collect_time",
@@ -60,6 +76,8 @@ func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(
 		metrics.RepositoriesGauge,
 		metrics.PRsByAuthorGauge,
 		metrics.PRsByReviewerGauge,
+		metrics.BranchesByAuthorGauge,
+		metrics.TagsByAuthorGauge,
 		metrics.CollectTimeGauge,
 	)
 
