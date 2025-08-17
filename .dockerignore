@@ -1,0 +1,8 @@
+/bruno
+/.dockerignore
+/bitbucket-metrics
+/config.example.yaml
+/config.yaml
+/Dockerfile
+/LICENSE
+/README.md

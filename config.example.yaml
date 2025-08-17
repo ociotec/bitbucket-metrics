@@ -1,0 +1,11 @@
+bitbucket:
+  api_page_size: 100
+  metrics:
+    hostname: localhost
+    port: 8080
+    path: /metrics
+    period_in_seconds: 3600
+  projects:
+    include:
+      - project1
+      - project2

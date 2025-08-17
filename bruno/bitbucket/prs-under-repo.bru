@@ -1,0 +1,19 @@
+meta {
+  name: prs-under-repo
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/projects/{{project}}/repos/{{repo}}/pull-requests?state=ALL
+  body: none
+  auth: inherit
+}
+
+params:query {
+  state: ALL
+}
+
+settings {
+  encodeUrl: true
+}

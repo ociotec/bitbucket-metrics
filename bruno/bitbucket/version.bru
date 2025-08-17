@@ -1,0 +1,15 @@
+meta {
+  name: version
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/application-properties
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

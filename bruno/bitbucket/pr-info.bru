@@ -1,0 +1,15 @@
+meta {
+  name: pr-info
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/projects/{{project}}/repos/{{repo}}/pull-requests/{{pr}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}
