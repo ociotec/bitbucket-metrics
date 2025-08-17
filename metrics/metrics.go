@@ -15,6 +15,7 @@ type Metrics struct {
 	RepositoriesGauge  prometheus.Gauge
 	PRsByAuthorGauge   *prometheus.GaugeVec
 	PRsByReviewerGauge *prometheus.GaugeVec
+	CollectTimeGauge   prometheus.Gauge
 }
 
 func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(metrics *Metrics)) {
@@ -45,6 +46,12 @@ func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(
 			},
 			[]string{"project", "repo", "reviewer"},
 		),
+		CollectTimeGauge: prometheus.NewGauge(
+			prometheus.GaugeOpts{
+				Name: "bitbucket_collect_time",
+				Help: "Bitbucket metrics collect time in milliseconds",
+			},
+		),
 	}
 	takeMetrics(&metrics)
 
@@ -53,6 +60,7 @@ func ListenAndServe(hostname string, port uint16, path string, takeMetrics func(
 		metrics.RepositoriesGauge,
 		metrics.PRsByAuthorGauge,
 		metrics.PRsByReviewerGauge,
+		metrics.CollectTimeGauge,
 	)
 
 	http.Handle(path, promhttp.Handler())

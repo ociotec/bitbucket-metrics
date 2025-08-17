@@ -109,5 +109,6 @@ func (runner *Runner) collectMetrics() {
 		}
 	}
 	elapsed := time.Since(start)
+	runner.metrics.CollectTimeGauge.Set(float64(elapsed.Milliseconds()))
 	log.Infof("Metrics collected in %v", elapsed)
 }
