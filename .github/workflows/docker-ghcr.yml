@@ -25,6 +25,12 @@ jobs:
       with:
         go-version: '1.25'
 
+    - name: Go dependencies submission
+      uses: actions/go-dependency-submission@v2
+      with:
+          go-mod-path: go.mod
+          go-build-target: main.go
+
     - name: Build Go application
       run: go build -v ./...
 
