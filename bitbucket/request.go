@@ -107,7 +107,7 @@ func (request *Request) RunWithArgs(verb string, args map[string]any, subURIs ..
 			"verb":        verb,
 			"url":         url.String(),
 			"code-status": httpResponse.StatusCode,
-			"body":        body[:100],
+			"body":        body,
 		}).Error("Cannot parse JSON body")
 		return nil, err
 	}
