@@ -12,10 +12,11 @@ import (
 )
 
 type Request struct {
-	BaseURL  *url.URL
-	Username string
-	Password string
-	PageSize int
+	BaseURL          *url.URL
+	Username         string
+	Password         string
+	PageSize         int
+	BitbucketVersion string
 }
 
 func NewRequest(baseURLString, username, password string, pageSize int) (*Request, error) {

@@ -63,6 +63,20 @@ docker run --rm \
            ociotec/bitbucket-metrics:latest
 ```
 
+## Code coverage
+
+To obtain code coverage information in the command line run:
+
+```bash
+go test -coverprofile=test-coverage.out
+```
+
+To decode that information per function run:
+
+```bash
+go tool cover -func=test-coverage.out
+```
+
 ## License
 
 Copyright 2025 Emilio González Montaña

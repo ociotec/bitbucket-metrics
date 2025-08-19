@@ -1,6 +1,7 @@
 package bitbucket
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 
@@ -24,6 +25,7 @@ func Init(bitbucketBaseURL, username, password string, apiPageSize int) *Request
 		}).Panic("Cannot get Bitbucket version")
 	}
 	log.Infof("Bitbucket v%s", version)
+	request.BitbucketVersion = version
 
 	return request
 }
@@ -42,7 +44,8 @@ func version(request *Request) (string, error) {
 		log.WithFields(log.Fields{
 			"json": result,
 		}).Error("Cannot extract Bitbucket version")
-		return "", err
+		message := fmt.Sprintf("Cannot extract Bitbucket version from JSON '%v'", result)
+		return "", errors.New(message)
 	}
 
 	return version, nil

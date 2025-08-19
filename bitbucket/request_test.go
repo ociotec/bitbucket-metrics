@@ -33,6 +33,21 @@ func TestNewRequestInvalidArguments(t *testing.T) {
 	}
 }
 
+func TestRunWithArgsWithInvalidVerb(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(""))
+	}))
+	req, err := NewRequest(ts.URL, "username", "password", 123)
+	if err != nil {
+		t.Errorf("NewRequest failed with error: %v", err)
+	}
+
+	_, err = req.RunWithArgs("???", nil, "1")
+	if err == nil {
+		t.Error("RunWithArgs should return error with bad HTTP verb")
+	}
+}
+
 func TestRunWithArgsWithValidVerbPathHeadersAndJSONBody(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
